@@ -1,0 +1,92 @@
+/*
+Name : Mariah Schon
+Class : 2240
+Program # : 4
+Due Date : 5 April
+Honor Pledge: On my honor as a student of the University
+of Nebraska at Omaha, I have neither given nor received
+unauthorized help on this homework assignment.
+NAME: Mariah Schon
+NUID: 581
+EMAIL: mschon@unomaha.edu
+Partners: CSLC
+This program reads in a file and formats it.
+*/
+
+#include <stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+int main(int argc, char *argv[]){
+    FILE *fptr;
+    FILE *formattedFile;
+
+    /*Gets the value from the command line and convert it to int*/
+    int input = atoi(argv[1]);
+    char *outline=(char*) malloc(sizeof(char)*(input+1));
+    char *line = (char *)malloc(sizeof(char)*1024);
+    char* token;
+    char* outputFileName = (char *)malloc(sizeof(char)*32);
+
+/*    char** wordlist = malloc(sizeof(char*));
+    int i, numwords = 0;*/
+
+
+    /*    printf("%d\n", argc);
+          for (i = 0; i < argc; i++)
+          printf("%s\n", argv[i]);
+          */
+    if ((fptr = fopen(argv[2], "r")) == NULL){
+        fprintf(stderr, "Error opening file\n");
+        exit(1);
+
+    }
+
+    strcpy(outputFileName, argv[2]);
+    strcat(outputFileName, ".out");
+    if ((formattedFile = fopen(outputFileName, "w")) == NULL) {
+        puts("Opened file for writing.");
+    }
+    while (fgets(line, 1024, fptr) != NULL)
+    {
+        /* Removes Newline */
+        if (line[strlen(line)-1] == '\n')
+        {
+            line[strlen(line)-1] = '\0';
+        }
+
+        token = strtok(line, " ");
+        while (token != NULL)
+        {
+            if (strlen(outline) + strlen(token)  < input)
+            {
+                /*wordlist[numwords] = strdup(token);
+                wordlist = realloc(wordlist, (numwords+1)*sizeof(char*));
+                numwords++;*/
+
+                strcat(outline, token);
+                strcat(outline, " ");
+            }
+            else
+            {
+                strcat(outline, "\n");
+               /* printf("%lu + %lu [%s]\n", strlen(outline), strlen(token), token);*/
+                fprintf(formattedFile, "%s", outline);
+                outline[0] = '\0';
+                strcat(outline, token);
+                strcat(outline, " ");
+            }
+            token = strtok(NULL, " ");
+        }
+    }
+
+    fprintf(formattedFile, "%s\n", outline);
+
+    fclose(fptr);
+    return 0;
+
+
+
+}
+            
